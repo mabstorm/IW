@@ -39,7 +39,7 @@ to_run.each do |arg|
         num_adjs+=1
       end
     end
-    (0..words.length-1).each do |window_size|
+    (0..0).each do |window_size|
       words.each_index do |i|
         num_above = found_adjs.select {|v| v>(i+window_size)}.length
         num_below = found_adjs.select {|v| v<i}.length
