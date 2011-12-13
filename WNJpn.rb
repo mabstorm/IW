@@ -15,6 +15,10 @@ class WNJpn
     @conn = SQLite3::Database.new(dbfile)
   end
 
+  def get_adj_sets
+    @conn.execute("SELECT word.*, sense.synset FROM word, sense WHERE word.lang='jpn' AND word.pos='a' AND word.wordid=sense.wordid AND word.wordid IN (SELECT wordid FROM sense WHERE lang='jpn' AND synset LIKE '%-a') ORDER BY sense.synset")
+  end
+
   def get_words(lemma)
     @conn.execute("select * from word where lemma=?",lemma).map{|row|Word.new(*row)}
   end
@@ -89,6 +93,7 @@ usage: wn.rb word link [lang]
   def close_db
     @conn.close
   end
+
 
 end
 

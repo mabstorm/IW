@@ -1,4 +1,5 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -Ku
+# -*- coding: utf-8 -*- 
 
 require 'pp'
 require 'yaml'
@@ -20,11 +21,12 @@ end
 
 
 to_run.each do |arg|
+  puts arg
   fp = File.open(arg,'r')
   dirnum = arg[7...8]
   filenum = arg[33...35]
-  sentences = fp.readlines
-  sentences.each do |line|
+  data = fp.readlines
+  data.each do |line|
     temp = line.split("-divider-")
     sentence = temp[0]
     pos_linked = temp[1]
@@ -39,7 +41,7 @@ to_run.each do |arg|
         num_adjs+=1
       end
     end
-    (0..sentence.length).each do |window_size|
+    (0..10).each do |window_size|
       words.each_index do |i|
         num_above = found_adjs.select {|v| v>(i+window_size)}.length
         num_below = found_adjs.select {|v| v<i}.length
@@ -61,30 +63,32 @@ to_run.each do |arg|
       end
     end
   end
-end
+  fp.close
+  fp = File.open("../patterns/#{arg}.patterns","w+")
 
-puts "\n\n\n++++++++++++PRES++++++++++++++++"
-puts "\n\n\n"
-pres = all_patterns.sort_by {|k,v| v[0]}.reverse
+  # pre patterns
 
+  pres = all_patterns.sort_by {|k,v| v[pre]}.reverse
+ 
+  pres.each do |ar|
+    fp.puts "#{ar[0]}\t0\t#{ar[1][pre]}"
+  end
 
-pres.each do |ar|
-  puts "#{ar[0]}\t#{ar[1][0]}"
-end
+  # mid patterns
 
-puts "\n\n\n++++++++++++MIDS++++++++++++++++"
-puts "\n\n\n"
-mids = all_patterns.sort_by {|k,v| v[1]}.reverse
-mids.each do |ar|
-  puts "#{ar[0]}\t#{ar[1][1]}"
-end
+  mids = all_patterns.sort_by {|k,v| v[mid]}.reverse
+  mids.each do |ar|
+    fp.puts "#{ar[0]}\t1\t#{ar[1][mid]}"
+  end
 
-puts "\n\n\n++++++++++++POSTS++++++++++++++++"
+  # post patterns
 
-puts "\n\n\n"
-posts = all_patterns.sort_by {|k,v| v[2]}.reverse
-posts.each do |ar|
-  puts "#{ar[0]}\t#{ar[1][2]}"
+  posts = all_patterns.sort_by {|k,v| v[post]}.reverse
+  posts.each do |ar|
+    fp.puts "#{ar[0]}\t2\t#{ar[1][post]}"
+  end
+  fp.close
+
 end
 
 
