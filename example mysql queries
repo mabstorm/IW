@@ -1,0 +1,4 @@
+SELECT * FROM word WHERE lang="jpn" AND pos="a"
+SELECT word.*, sense.synset FROM word, sense WHERE word.lang='jpn' AND word.pos='a' AND word.wordid=sense.wordid AND word.wordid IN (SELECT wordid FROM sense WHERE lang='jpn' AND synset LIKE '%-a') LIMIT 20
+
+SELECT word.*, synset_def.def FROM word,synset_def WHERE synset_def.lang='jpn' AND word.lang='jpn' AND wordid IN (SELECT wordid FROM sense WHERE synset='00155144-a') AND synset_def.synset='00155144-a'

@@ -6,17 +6,18 @@ require 'yaml'
 
 
 
-def make_patterns
+def make_patterns(files)
 
 all_patterns = Hash.new
 pre = 0
 mid = 1
 post = 2
+min_print = 10
 
-if ARGV.empty?
-  to_run = "./tsubame00.kototoi.org/doc0000000000-pos.txt"
+if files.nil?
+  puts "error"
 else
-  to_run = ARGV
+  to_run = files
 end
 
 
@@ -26,7 +27,10 @@ to_run.each do |arg|
   dirnum = arg[7...8]
   filenum = arg[33...35]
   data = fp.readlines
-  data.each do |line|
+  num_lines_to_process = data.length
+  data.each_index do |li|
+    line = data[li]
+    $stderr.print "\rFile: #{arg} Line: #{li} / #{num_lines_to_process}"
     temp = line.split("-divider-")
     sentence = temp[0]
     pos_linked = temp[1]
@@ -43,10 +47,11 @@ to_run.each do |arg|
     end
     (0..10).each do |window_size|
       words.each_index do |i|
+        break if i+window_size >= words.length
         num_above = found_adjs.select {|v| v>(i+window_size)}.length
         num_below = found_adjs.select {|v| v<i}.length
-        this_word = words[i..i+window_size].join(" ") if i+window_size < words.length
-        this_pos = pos[i..i+window_size].join(" ") if i+window_size < words.length
+        this_word = words[i..i+window_size].join(" ")
+        this_pos = pos[i..i+window_size].join(" ")
         key = "#{this_word}--#{this_pos}"
         if num_above > 1
           all_patterns[key] = [0,0,0] if all_patterns[key].nil?
@@ -67,25 +72,25 @@ to_run.each do |arg|
   fp = File.open("../patterns/#{arg}.patterns","w+")
 
   # pre patterns
-
-  pres = all_patterns.sort_by {|k,v| v[pre]}.reverse
+  fp.puts "---pres---"
+  pres = all_patterns.sort_by {|k,v| -v[pre]}
  
   pres.each do |ar|
-    fp.puts "#{ar[0]}\t0\t#{ar[1][pre]}"
+    fp.puts "#{ar[0]}\tpre\t#{ar[1][pre]}" if ar[1][pre] > min_print
   end
 
   # mid patterns
-
-  mids = all_patterns.sort_by {|k,v| v[mid]}.reverse
+  fp.puts "---mids---"
+  mids = all_patterns.sort_by {|k,v| -v[mid]}
   mids.each do |ar|
-    fp.puts "#{ar[0]}\t1\t#{ar[1][mid]}"
+    fp.puts "#{ar[0]}\tmid\t#{ar[1][mid]}" if ar[1][mid] > min_print
   end
 
   # post patterns
-
-  posts = all_patterns.sort_by {|k,v| v[post]}.reverse
+  fp.puts "---post---"
+  posts = all_patterns.sort_by {|k,v| -v[post]}
   posts.each do |ar|
-    fp.puts "#{ar[0]}\t2\t#{ar[1][post]}"
+    fp.puts "#{ar[0]}\tpst\t#{ar[1][post]}" if ar[1][post] > min_print
   end
   fp.close
 
@@ -99,6 +104,6 @@ end
 
 # main
 if __FILE__ == $0
-  make_patterns
+  make_patterns(ARGV)
 end
 
