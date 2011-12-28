@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 require './WNJpn.rb'
+require './get_adj_groups.rb'
 
 dbfile = "../wnjpn.db"
 wnj = WNJpn.new(dbfile)
@@ -20,30 +21,7 @@ word_id = 2
 max_results = 50
 per_file_limit = 10000
 
-adjs = wnj.get_adj_sets
-counts=Hash.new(0)
-adjs.each {|adj| counts[adj[synsetid]]+=1}
-
-results = counts.sort_by{|k,v| -v}
-
-num_results = 0
-
-test_synsetids = Hash.new
-
-results.each do |synset, num|
-  num_results+=1
-  break if num_results > max_results
-  #puts "#{synset}=#{num}"
-  test_synsetids[synset] = Array.new
-end
-
-adjs.each do |adj|
-  synset = adj[synsetid]
-  next if test_synsetids[synset].nil?
-  word = adj[word_id]
-  wordid = adj[wordid_id]
-  test_synsetids[synset].push([word,wordid])
-end
+test_synsetids = get_groups
 
 #puts test_synsetids.first
 
