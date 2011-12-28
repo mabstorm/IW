@@ -42,10 +42,11 @@ def print_adjs_groups
   puts test_synsetids.keys.length
 
   test_synsetids.each_pair do |synset, wordar|
-    fp.print '#{synset}\t'
+    fp.print "#{synset}\t"
     wordar.each_index do |i|
-      fp.print '#{wordar[i][0]}--#{wordar[i][1]}\t'
+      fp.print "#{wordar[i][0]}--#{wordar[i][1]}\t"
     end
+    fp.puts ''
   end
 end
 
