@@ -50,34 +50,24 @@ def print_adjs_groups
   end
 end
 
-def read_adjs_groups
+def read_adjs_groups(option)
   fp = File.open(@output_file, 'r')
   data = fp.readlines
   test_synsetids = Hash.new
   data.each do |line|
-    line = line.split('\t')
+    line = line.strip
+    next if line.nil?
+    line = line.split("\t")
     synset = line[0]
     test_synsetids[synset] = Array.new
-    (1..length(line)).each do |i|
-      wordpair = line[i].split('--')
-      test_synsetids[synset].push(wordpair)
-    end
-  end
-  return test_synsetids
-end
-
-def read_adjs_groups_simple
-  fp = File.open(@output_file, 'r')
-  data = fp.readlines
-  test_synsetids = Hash.new
-  data.each do |line|
-    line = line.split('\t')
-    synset = line[0]
-    test_synsetids[synset] = Array.new
-    (1..line.length).each do |i|
+    (1..(line.length-1)).each do |i|
       next if line[i].nil?
       wordpair = line[i].split('--')
-      test_synsetids[synset].push(wordpair[0])
+      if option=='simple'
+        test_synsetids[synset].push(wordpair[0])
+      else
+        test_synsetids[synset].push(wordpair)
+      end
     end
   end
   return test_synsetids
@@ -86,10 +76,10 @@ end
 
 def get_groups
   print_adjs_groups if !File.exist? @output_file
-  read_adjs_groups
+  read_adjs_groups('full')
 end
 
 def get_groups_simple
   print_adjs_groups if !File.exist? @output_file
-  read_adjs_groups_simple
+  read_adjs_groups('simple')
 end
