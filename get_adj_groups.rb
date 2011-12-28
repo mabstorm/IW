@@ -3,17 +3,19 @@
 
 require './WNJpn.rb'
 
-output_file = "./adjgroups"
+@output_file = "./adjgroups"
+@dbfile = "../wnjpn.db"
+@wnj = WNJpn.new(@dbfile)
 
 def print_adjs_groups
   
-  fp = File.open(output_file,'w+')
+  fp = File.open(@output_file,'w+')
   synsetid = 5
   wordid_id = 0
   word_id = 2
   max_results = 50
 
-  adjs = wnj.get_adj_sets
+  adjs = @wnj.get_adj_sets
   counts=Hash.new(0)
   adjs.each {|adj| counts[adj[synsetid]]+=1}
 
@@ -37,6 +39,7 @@ def print_adjs_groups
     wordid = adj[wordid_id]
     test_synsetids[synset].push([word,wordid])
   end
+  puts test_synsetids.keys.length
 
   test_synsetids.each_pair do |synset, wordar|
     fp.print '#{synset}\t'
@@ -47,7 +50,7 @@ def print_adjs_groups
 end
 
 def read_adjs_groups
-  fp = File.open(output_file, 'r')
+  fp = File.open(@output_file, 'r')
   data = fp.readlines
   test_synsetids = Hash.new
   data.each do |line|
@@ -63,14 +66,15 @@ def read_adjs_groups
 end
 
 def read_adjs_groups_simple
-  fp = File.open(output_file, 'r')
+  fp = File.open(@output_file, 'r')
   data = fp.readlines
   test_synsetids = Hash.new
   data.each do |line|
     line = line.split('\t')
     synset = line[0]
     test_synsetids[synset] = Array.new
-    (1..length(line)).each do |i|
+    (1..line.length).each do |i|
+      next if line[i].nil?
       wordpair = line[i].split('--')
       test_synsetids[synset].push(wordpair[0])
     end
@@ -80,11 +84,11 @@ end
 
 
 def get_groups
-  print_adjs_groups if !File.exist? output_file
+  print_adjs_groups if !File.exist? @output_file
   read_adjs_groups
 end
 
 def get_groups_simple
-  print_adjs_groups if !File.exist? output_file
+  print_adjs_groups if !File.exist? @output_file
   read_adjs_groups_simple
 end
