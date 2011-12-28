@@ -10,6 +10,9 @@ patterns = File.open(pattern_file,'r').readlines
 
 adjs = get_groups_simple
 
+puts adjs.first
+return ''
+
 counts = Hash.new
 
 ARGV.each do |arg|
@@ -18,7 +21,7 @@ ARGV.each do |arg|
     adjs.each do |adj_a|
       adjs.each do |adj_b|
         next if adj_a==adj_b
-        next if /sentence does not have both/
+        next if (sentence.match(adj_a).nil? || sentence.match(adj_b).nil?) 
         patterns.each do |pattern|
           fst_pattern = pattern.sub("{A}",adj_a).sub("{B}", adj_b)
           sec_pattern = pattern.sub("{A}",adj_b).sub("{B}", adj_a)
