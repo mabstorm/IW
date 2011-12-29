@@ -57,6 +57,7 @@ num_out_files = 1
         num_out_files+=1
         num_results_this_fpo = 0
       end
+      break
     end
   end
 end
