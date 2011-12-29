@@ -13,8 +13,8 @@ end
 
 word_a = "大きい"
 word_b = "巨大"
-pattern_a = "#{word_a}[^、]*#{word_b}"
-pattern_b = "#{word_b}[^、]*#{word_a}"
+pattern_a = "#{word_a}[^、,]*#{word_b}"
+pattern_b = "#{word_b}[^、,]*#{word_a}"
 filenm = 0
 ttlfl = ARGV.length
 ARGV.each do |arg|
