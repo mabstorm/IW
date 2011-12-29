@@ -30,9 +30,9 @@ ARGV.each do |arg|
     sentence = line[0].strip
     next if (sentence.match(word_a).nil? || sentence.match(word_b).nil?)
     m = sentence.match(pattern_a)
-    inc_counts(m.string) if !m.nil?
+    inc_counts(m[0]) if !m.nil?
     m2 = sentence.match(pattern_b)
-    inc_counts(m2.string) if !m2.nil?
+    inc_counts(m2[0]) if !m2.nil?
   end
 end
 
