@@ -1,0 +1,45 @@
+Abstract (4 sentences)Introduction (1 page)The problem (1 page)My idea (2 pages)The details (5 pages)Related work (1-2 pages)Conclusions and further work (0.5 pages)
+
+Abstract:
+Introduction:
+AdjScaling
+    What
+    Why
+
+Desired Applications:
+Machine translation
+Pedagogical resources
+Cultural linguistic comparisons
+
+
+
+Methodology:
+Corpus
+    Japanese Internet corpus by Kyoto University
+    Encoding issues
+    Trimming heuristics
+Induce patterns
+    Techniques
+    Problems
+    Differences with English
+    Attempted solutions/heuristics
+Use patterns with words to find orderings
+    General technique
+
+Problems/differences with English
+   
+Use orderings and logic to make scale
+    No need to know which side of pattern was “stronger” or “weaker”, just build along a consistent direction
+
+Considerations:
+Parallel scales that differ along different traits such as formality, what they can modify, etc.
+Corpus being mostly written so written speech bias
+Confidence in a pair
+
+Background Research:
+AdjScaling
+WordNet
+VerbOcean
+Japanese WordNet
+Corpus Paper
+
