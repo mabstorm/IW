@@ -27,14 +27,17 @@ adjs_groups.each {|synsetid, adjs| adjs.each {|adj| adj.strip!}}
 #test_sentence = "壮絶.*大胆不敵といえるほど"
 #test_sentence = "壮絶大胆不敵ともいえる"
 num_sentences = 0
+num_files = 0
+tot_files = files.length
 files.each do |arg|
+  num_sentences = 0
   sentences = File.open(arg,'r').readlines
   sentences.each do |line|
     line = line.split('-divider-') #currently ignoring POS tags...
     next if line[1].nil?
     sentence = line[0].gsub(" ", "")
     num_sentences+=1
-    $stderr.print "\r#{num_sentences} / #{sentences.length} : found: #{@num_found}" if num_sentences % 200 == 0
+    $stderr.print "\r#{num_sentences} / #{sentences.length} : #{num_files} / #{tot_files} : found: #{@num_found}" if num_sentences % 1000 == 0
     adjs_groups.each do |synsetid, adjs|
     #adjs = adjs_groups["01385255-a"] # `big`
     adjs.each_index do |i|
