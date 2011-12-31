@@ -37,7 +37,7 @@ files.each do |arg|
     next if line[1].nil?
     sentence = line[0].gsub(" ", "")
     num_sentences+=1
-    $stderr.print "\r#{num_sentences} / #{sentences.length} : #{num_files} / #{tot_files} : found: #{@num_found}" if num_sentences % 1000 == 0
+    $stderr.print "\r#{num_sentences} / #{sentences.length} :\t #{num_files} / #{tot_files} :\t found: #{@num_found}" if num_sentences % 1000 == 0
     adjs_groups.each do |synsetid, adjs|
     #adjs = adjs_groups["01385255-a"] # `big`
     adjs.each_index do |i|
